@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9112347D2567628700192FAC /* MovieVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9112347C2567628700192FAC /* MovieVC.swift */; };
-		9112347F256768DF00192FAC /* RemovedCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9112347E256768DF00192FAC /* RemovedCollectionViewController.swift */; };
+		9112347F256768DF00192FAC /* MovieVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9112347E256768DF00192FAC /* MovieVC.swift */; };
 		9112348125681BB000192FAC /* MovieHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9112348025681BB000192FAC /* MovieHeader.swift */; };
 		9112348325681C2600192FAC /* MovieHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9112348225681C2600192FAC /* MovieHeaderViewModel.swift */; };
 		911234852568388100192FAC /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911234842568388100192FAC /* CircularProgressBar.swift */; };
-		911234872568874300192FAC /* MovieDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911234862568874300192FAC /* MovieDetailCell.swift */; };
-		911234892568895600192FAC /* MovieCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911234882568895600192FAC /* MovieCellViewModel.swift */; };
+		911234AD256B13CF00192FAC /* MovieDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911234AC256B13CF00192FAC /* MovieDetailCell.swift */; };
 		9126B9FD256068F4009DE83D /* MainTabVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126B9FC256068F4009DE83D /* MainTabVC.swift */; };
 		9126B9FF2560817D009DE83D /* AllMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9126B9FE2560817D009DE83D /* AllMovieCell.swift */; };
 		914174DC255F23F60018811C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914174DB255F23F60018811C /* AppDelegate.swift */; };
@@ -37,13 +35,11 @@
 		5F6F5C78EC51F9A45DDF8512 /* Pods-MovieApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieApp.release.xcconfig"; path = "Target Support Files/Pods-MovieApp/Pods-MovieApp.release.xcconfig"; sourceTree = "<group>"; };
 		6FD013DC1FB2ADCE85E70821 /* Pods_MovieApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D0FC2201C47D15CF7034F72 /* Pods-MovieApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieApp.debug.xcconfig"; path = "Target Support Files/Pods-MovieApp/Pods-MovieApp.debug.xcconfig"; sourceTree = "<group>"; };
-		9112347C2567628700192FAC /* MovieVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieVC.swift; sourceTree = "<group>"; };
-		9112347E256768DF00192FAC /* RemovedCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedCollectionViewController.swift; sourceTree = "<group>"; };
+		9112347E256768DF00192FAC /* MovieVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieVC.swift; sourceTree = "<group>"; };
 		9112348025681BB000192FAC /* MovieHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHeader.swift; sourceTree = "<group>"; };
 		9112348225681C2600192FAC /* MovieHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHeaderViewModel.swift; sourceTree = "<group>"; };
 		911234842568388100192FAC /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
-		911234862568874300192FAC /* MovieDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailCell.swift; sourceTree = "<group>"; };
-		911234882568895600192FAC /* MovieCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellViewModel.swift; sourceTree = "<group>"; };
+		911234AC256B13CF00192FAC /* MovieDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailCell.swift; sourceTree = "<group>"; };
 		9126B9FC256068F4009DE83D /* MainTabVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabVC.swift; sourceTree = "<group>"; };
 		9126B9FE2560817D009DE83D /* AllMovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMovieCell.swift; sourceTree = "<group>"; };
 		914174D8255F23F60018811C /* MovieApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,8 +146,7 @@
 			children = (
 				914174FF255F25450018811C /* HomeList.swift */,
 				9126B9FC256068F4009DE83D /* MainTabVC.swift */,
-				9112347C2567628700192FAC /* MovieVC.swift */,
-				9112347E256768DF00192FAC /* RemovedCollectionViewController.swift */,
+				9112347E256768DF00192FAC /* MovieVC.swift */,
 			);
 			path = Cotrollers;
 			sourceTree = "<group>";
@@ -177,7 +172,6 @@
 			isa = PBXGroup;
 			children = (
 				9112348225681C2600192FAC /* MovieHeaderViewModel.swift */,
-				911234882568895600192FAC /* MovieCellViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -240,7 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				9126B9FE2560817D009DE83D /* AllMovieCell.swift */,
-				911234862568874300192FAC /* MovieDetailCell.swift */,
+				911234AC256B13CF00192FAC /* MovieDetailCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -396,6 +390,7 @@
 				91417510255F42860018811C /* BaseReusableViews.swift in Sources */,
 				91417500255F25450018811C /* HomeList.swift in Sources */,
 				911234852568388100192FAC /* CircularProgressBar.swift in Sources */,
+				911234AD256B13CF00192FAC /* MovieDetailCell.swift in Sources */,
 				914174DC255F23F60018811C /* AppDelegate.swift in Sources */,
 				9141750E255F32620018811C /* MovieCellContainer.swift in Sources */,
 				9126B9FD256068F4009DE83D /* MainTabVC.swift in Sources */,
@@ -404,14 +399,11 @@
 				91417502255F25B00018811C /* Constant.swift in Sources */,
 				9141750C255F32120018811C /* BaseCell.swift in Sources */,
 				9112348325681C2600192FAC /* MovieHeaderViewModel.swift in Sources */,
-				9112347D2567628700192FAC /* MovieVC.swift in Sources */,
 				91417506255F27A80018811C /* MoviewContainer.swift in Sources */,
 				91417504255F26BC0018811C /* Endpoints.swift in Sources */,
-				911234872568874300192FAC /* MovieDetailCell.swift in Sources */,
 				9191A2002562CC4600D64115 /* MovieDetailObjectManager.swift in Sources */,
 				91417508255F297D0018811C /* MovieService.swift in Sources */,
-				9112347F256768DF00192FAC /* RemovedCollectionViewController.swift in Sources */,
-				911234892568895600192FAC /* MovieCellViewModel.swift in Sources */,
+				9112347F256768DF00192FAC /* MovieVC.swift in Sources */,
 				9112348125681BB000192FAC /* MovieHeader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

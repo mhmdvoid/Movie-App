@@ -24,13 +24,9 @@ class MovieDetailCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         addSubview(textView)
         textView.fillToEdge(in: self)
-        setupCell()
-    }
-    
-    fileprivate func setupCell() {
-        backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {

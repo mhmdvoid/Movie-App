@@ -22,9 +22,11 @@ class MovieCellContainer: BaseCell {
     var popularMovies = [MovieResult]()
     private let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .large)
-        ai.color = .label
+        ai.color = .systemRed
         return ai
     }()
+    
+    private let holderView = UIView()
     
     let topSpace: CGFloat = 30
     var headerTitle: APIEndpoint? {
@@ -97,22 +99,27 @@ class MovieCellContainer: BaseCell {
             dispatchGroup.leave()
         }
         
-        
         dispatchGroup.notify(queue: .main) { [weak self] in // To notify ourselves when multiple different tasks are finished
             guard let self = self else { return }
+            print("reload")
+            self.activityIndicator.stopAnimating()
+            self.activityIndicator.hidesWhenStopped = true
             self.collectionView.reloadData()
-//            self.activityIndicator.stopAnimating()
-//            self.activityIndicator.hidesWhenStopped = true 
             
         }
     }
     
     // MARK: Helpers
     override func setupSubviews() {
-//        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
 //        window.addSubview(activityIndicator)
-//        activityIndicator.center = window.center
-//        activityIndicator.startAnimating()
+        window.addSubview(holderView)
+        holderView.setDimension(width: 50, height: 50)
+        holderView.backgroundColor = .systemRed
+        holderView.center = window.center
+        holderView.addSubview(activityIndicator)
+        activityIndicator.center = holderView.center
+        activityIndicator.startAnimating()
         fetch()
         addSubviews(withViews: collectionView, sectionTitle)
         setupCollectionView()

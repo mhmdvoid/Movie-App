@@ -24,20 +24,23 @@ struct MovieViewModel {
     
     var movieOverview: NSAttributedString? {
         guard let overview = movie.overview else { return nil}
-        let attributedText = NSMutableAttributedString(string: "Overview:\n", attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .bold)])
+        let attributedText = NSMutableAttributedString(string: "Overview:\n", attributes: [.font: UIFont.systemFont(ofSize: 17, weight: .bold), .foregroundColor: UIColor.label])
         
-        attributedText.append(NSAttributedString(string: overview, attributes: [.font: UIFont.systemFont(ofSize: 16)]))
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        paragraphStyle.lineSpacing = 4
-//        let range = NSMakeRange(0, attributedText.length)
-//        attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 6
+        let range = NSMakeRange(0, attributedText.length)
+        attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
+        
+        attributedText.append(NSAttributedString(string: overview, attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.label]))
+        
         return attributedText
     }
     
     
+    // Figure out the size of the cell bases on the text
     func size(forWidth width: CGFloat) -> CGSize {
         let measurementLabel = UILabel()
-        measurementLabel.text = movie.overview
+        measurementLabel.attributedText = movieOverview
         measurementLabel.numberOfLines = 0
         measurementLabel.lineBreakMode = .byWordWrapping
         measurementLabel.translatesAutoresizingMaskIntoConstraints = false

@@ -8,26 +8,39 @@
 
 import UIKit
 
-class MovieHeader: BaseReusableViews {
+class MovieHeader: UITableViewCell {
     
-    let circularProgress: CGFloat = 40
     static let headerCell = "headerCell"
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupSubviews()
+        setupHeader()
+    }
+    
+    lazy var listButtons = [UIButton]()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    let circularProgress: CGFloat = 40
     var theMovie: MovieDetail? {
         didSet {
-            print("FG")
+            
             showContent()
             
         }
     }
+    
+    var geners: [Generis]? {
+        didSet { setupLabels() }
+    }
+    
+    
     
     private let moviewImage: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 5
-//        iv.layer.masksToBounds = true
-//        iv.sizeToFit()
-//        iv.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return iv
     }()
     //circularProfress
@@ -55,8 +68,7 @@ class MovieHeader: BaseReusableViews {
         separator.backgroundColor = .separator
         return separator
     }()
-    override func setupSubviews() {
-        setupHeader()
+    func setupSubviews() {
         setupCircularProgressBar()
         addSubview(ratings)
         addSubview(moviewImage)
@@ -68,11 +80,34 @@ class MovieHeader: BaseReusableViews {
     }
     
     fileprivate func setupHeader() {
-//        backgroundColor = UIColor(white: 0, alpha: 0.2)
         backgroundColor = .systemBackground
-//        layer.borderWidth = 3
-//        layer.cornerRadius = 5
-//        layer.borderColor = UIColor.lightGray.cgColor
+        selectionStyle = .none
+    }
+
+    
+    fileprivate func setupLabels() {
+//        guard let geners = geners else { return }
+//        print("Hello")
+//        
+////        lazy var listButton: [UIButton]
+//        for i in 0..<geners.count {
+//            // create buttons right here and append them to array
+//            let eachButton = UIButton()
+//            eachButton.setTitle(geners[i].name, for: .normal)
+//            eachButton.titleLabel?.font = .systemFont(ofSize: 9)
+//            eachButton.backgroundColor = .red
+//            listButtons.append(eachButton)
+//
+//        }
+//
+//        let hStack = UIStackView(arrangedSubviews: listButtons)
+//        addSubview(hStack)
+//        hStack.distribution = .equalSpacing
+//        hStack.axis = .horizontal
+//        hStack.spacing = 20
+//        print(listButtons)
+//        hStack.anchor(fromTop: nil , fromLeading: moviewImage.trailingAnchor, fromBottom: self.bottomAnchor, fromTrailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: -10), size: .init(width: 0, height: 50))
+        
     }
     
     fileprivate func setupCircularProgressBar() {

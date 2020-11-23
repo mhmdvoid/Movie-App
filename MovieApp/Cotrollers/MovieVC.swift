@@ -1,124 +1,94 @@
-//
-//  MovieVC.swift
-//  MovieApp
-//
-//  Created by Mohammed mohsen on 20/11/2020.
-//  Copyright © 2020 Mohammed mohsen. All rights reserved.
-//
-
 import UIKit
 
-class MovieVC: UICollectionViewController {
-    
+class MovieVC: UITableViewController {
     
     let theMovieId: Int
     let backButtonString: String
-    var theMovie: MovieDetail? {
+    var movieGeners: [Generis]? {
         didSet {
             DispatchQueue.main.async { [weak self] in
-                self?.collectionView.reloadData()
-                self?.activityIndicator.stopAnimating()
+                self?.tableView.reloadData()
             }
         }
     }
-    private let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .large)
-        ai.color = .label
-        return ai
-    }()
+    var theMovie: MovieDetail? {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    
+    
     init(theMovieId: Int, backButtonTitle: String) {
         self.theMovieId = theMovieId
         self.backButtonString = backButtonTitle
-        let layout = FlowLayout()
-        
-        super.init(collectionViewLayout: layout)
-        
+        super.init(nibName: nil, bundle: nil)
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(activityIndicator)
-        activityIndicator.center(inView: view)
-        activityIndicator.startAnimating()
-        navigationItem.title = "Detail"
+        navigationItem.title = "Details"
+        setupTableView()
         
-        let backButton = UIBarButtonItem()
-        backButton.title = backButtonString
-        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
-        
-        collectionView.backgroundColor = .systemBackground
-        collectionView.register(MovieDetailCell.self , forCellWithReuseIdentifier: "movieDetail")
-        collectionView.register(MovieHeader.self , forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MovieHeader.headerCell)
-        collectionView.register(UICollectionReusableView.self , forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "footer")
-        print("ID: ", theMovieId)
-        
+        fetchMovie()
+    }
+    
+    // MARK: API
+    fileprivate func fetchMovie() {
         MovieService.shared.fetchMovie(withId: theMovieId) { (result) in
             switch result {
             case .success(let theMovie):
                 self.theMovie = theMovie
-            //                self.movieGener = theMovie.genres;
+                self.movieGeners = theMovie.genres
             case .failure(let e):
                 print(e.localizedDescription)
             }
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+    fileprivate func setupTableView() {
+        tableView.register(MovieDetailCell.self , forCellReuseIdentifier: MovieDetailCell.movieCellId)
+        tableView.register(MovieHeader.self , forCellReuseIdentifier: MovieHeader.headerCell)
+        tableView.separatorStyle = .none
+        setupFooter()
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieDetail", for: indexPath) as! MovieDetailCell
-        cell.backgroundColor = .systemBackground
+    fileprivate func setupFooter() {
+        let footer = UIView(frame: .init(x: 0, y: 0, width: view.frame.width, height: 250))
+        footer
+            .backgroundColor = .red
+        tableView.tableFooterView = footer
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: MovieHeader.headerCell) as! MovieHeader
+            
+            cell.theMovie = theMovie
+            cell.geners = self.movieGeners
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: MovieDetailCell.movieCellId) as! MovieDetailCell
         cell.theMovie = theMovie
+        
+        
         return cell
     }
     
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-            
-        case UICollectionView.elementKindSectionHeader:
-            
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MovieHeader.headerCell, for: indexPath) as! MovieHeader
-            headerView.theMovie = theMovie
-            //
-            //            headerView.backgroundColor = .systemBackground
-            return headerView
-            
-        case UICollectionView.elementKindSectionFooter:
-            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath)
-            
-            footerView.backgroundColor = .systemGreen
-            return footerView
-            
-        default:
-            
-            assert(false, "Unexpected element kind")
-        }
-    }
-}
-
-extension MovieVC: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let theMovie = theMovie else {
-            return .zero
-        }
-        let viewModel = MovieViewModel(movie: theMovie)
-        let height = viewModel.size(forWidth: view.frame.width).height
-        // was 42
-        
-        // i could've used the Overview here that will be way better i will tesr
-        return CGSize(width: view.frame.width, height: height + 30)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 250)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 250)
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.row == 0 ? 220 : UITableView.automaticDimension
     }
 }
