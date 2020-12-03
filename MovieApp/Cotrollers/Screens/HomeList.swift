@@ -11,8 +11,26 @@ private let reuseIdentifier = "Cell"
 
 class HomeList: UICollectionViewController {
     
-    // MARK: Properties
+    lazy var refereshControl: UIRefreshControl = {
+        let r = UIRefreshControl()
+        r.addTarget(self , action: #selector(refresh), for: .valueChanged)
+        r.tintColor = .systemRed
+        return r
+    }()
     
+    deinit {
+        print("Controller deallocated")
+    }
+    // MARK: Properties
+    var playingNowMovies = [MovieResult]()
+    var topRatedMovies = [MovieResult]()
+    var upcomingMovies = [MovieResult]()
+    var popularMovies = [MovieResult]()
+    private let activityIndicator: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView(style: .large)
+        ai.color = .systemRed
+        return ai
+    }()
     
     // MARK: Constructor
     init() {
@@ -28,27 +46,77 @@ class HomeList: UICollectionViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("List DID LOAD")
+        view.addSubview(activityIndicator)
+        activityIndicator.center(inView: view)
+        activityIndicator.startAnimating()
         setupCollectionView()
+        fetch()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated )
-        print("WILL LOAD")
         setNavBar()
     }
+
+    // MARK: API
+    fileprivate func fetch() {
+        let dispatchGroup = DispatchGroup()
+        
+        let endpoints: [APIEndpoint] = [.nowPlaying, .popular, .topRated, .upcoming]
+        for endpoint in endpoints {
+            dispatchGroup.enter()
+            MovieService.shared.fetchMovies(with: endpoint) { [weak self] result in  // Perfect
+                guard let this = self else { return }
+                switch result {
+                case .success(let movieRest):
+                    switch endpoint {
+                    case .nowPlaying:
+                        
+                        this.playingNowMovies = movieRest.results
+                    case .popular:
+                        
+                        this.popularMovies = movieRest.results
+                    case .topRated:
+                        
+                        this.topRatedMovies = movieRest.results
+                    case .upcoming:
+                        
+                        this.upcomingMovies = movieRest.results
+                    }
+                case .failure(let e):
+                    print(e.localizedDescription)
+                }
+                dispatchGroup.leave()
+            }
+        }
+        dispatchGroup.notify(queue: .main) { [weak self] in // To notify ourselves when multiple different tasks are finished
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.activityIndicator.hidesWhenStopped = true
+            self.collectionView.reloadData()
+            
+        }
+    }
     
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.fetch()
+            refreshControl.endRefreshing()
+        }
+        
+    }
     // MARK: Helpers
     fileprivate func setupCollectionView() {
+        collectionView.refreshControl = refereshControl
         collectionView.backgroundColor = .systemBackground
         collectionView.register(MovieCellContainer.self, forCellWithReuseIdentifier: reuseIdentifier)
         
     }
     
-    // MARK: API
-    
     fileprivate func setNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
+    
     
     // MARK: UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -62,27 +130,30 @@ class HomeList: UICollectionViewController {
             let cellHeader = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! MovieCellContainer
             cellHeader.whichRow = indexPath.row
             cellHeader.headerTitle = APIEndpoint(rawValue: indexPath.row)
+            cellHeader.moviesSet = popularMovies
             cellHeader.delegate = self
             return cellHeader
         case 1:
             let nowPlayingcell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as!  MovieCellContainer
             nowPlayingcell.headerTitle = APIEndpoint(rawValue: indexPath.row)
             nowPlayingcell.whichRow = indexPath.row
+            nowPlayingcell.moviesSet = playingNowMovies
             nowPlayingcell.delegate = self
             return nowPlayingcell
         case 2:
             let topRatedCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as!  MovieCellContainer
             topRatedCell.headerTitle = APIEndpoint(rawValue: indexPath.row)
             topRatedCell.whichRow = indexPath.row
+            topRatedCell.moviesSet = topRatedMovies
             topRatedCell.delegate = self
             return topRatedCell
         case 3:
             let upcomingCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as!  MovieCellContainer
             upcomingCell.headerTitle = APIEndpoint(rawValue: indexPath.row)
-            print(indexPath.row)
+            
             upcomingCell.whichRow = indexPath.row
             upcomingCell.delegate = self
-            
+            upcomingCell.moviesSet = upcomingMovies
             return upcomingCell
         default :
             return .init(frame: .zero)

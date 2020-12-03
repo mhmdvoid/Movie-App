@@ -73,7 +73,7 @@ class CircularProgressBar: UIView {
         animation.fromValue = 0
         animation.toValue   = value
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
-        print(value)
+        
         progressLayer.strokeEnd = CGFloat(value)
         progressLayer.add(animation, forKey: "animateprogress")
     }

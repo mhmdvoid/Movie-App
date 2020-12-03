@@ -10,14 +10,17 @@ class MovieService {
     
     func fetchMovies(with endpoint: APIEndpoint, completion: @escaping (Result<MovieManager, Error>) -> ()) {
         let formattedURL = "\(baseURL)movie/\(endpoint.endpointDescription)?api_key=\(apiKey)"
-        print("URL \(formattedURL)")
+        
         guard let url = URL(string: formattedURL) else {
             print("FAKE URL")
             return
             
         }
         
-        let session = URLSession(configuration: .default)
+        let configuration = URLSessionConfiguration.default
+        configuration.waitsForConnectivity = true
+
+        let session = URLSession(configuration: configuration)
         
         let task = session.dataTask(with: url) { (data, res , e) in
             if let e = e {
@@ -73,15 +76,22 @@ class MovieService {
     }
     
     
-    func fetchMovie(withId movieId: Int, completion: @escaping (Result<MovieDetail, Error>) -> () ) {
-        let formattedURL = "\(baseURL)movie/\(movieId)?api_key=\(apiKey)"
-        print("URL \(formattedURL)")
+    func fetchMovie(withId movieId: Int, appendTo: [ExtraResponse],  completion: @escaping (Result<MovieDetail, Error>) -> () ) {
+        
+        let stringArray = appendTo.map { $0.rawValue }
+        let newString = stringArray.joined(separator: ",")
+        let formattedURL = "\(baseURL)movie/\(movieId)?api_key=\(apiKey)&append_to_response=\(newString)"
+
         guard let url = URL(string: formattedURL) else {
             print("FAKE URL")
             return
         }
         
-        let session = URLSession(configuration: .default)
+        let configuration = URLSessionConfiguration.default
+        configuration.waitsForConnectivity = true
+
+        let session = URLSession(configuration: configuration)
+        
         
         let task = session.dataTask(with: url) { (data, res , e) in
             if let e = e {

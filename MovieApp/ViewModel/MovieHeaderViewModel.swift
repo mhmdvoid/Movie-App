@@ -32,11 +32,31 @@ struct MovieViewModel {
         attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
         
         attributedText.append(NSAttributedString(string: overview, attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.label]))
-        
         return attributedText
     }
     
     
+
+    var isHighRated: Bool {
+        var flag = false
+        let movieRate = Int(movie.vote_average * 10)
+        if movieRate >= 70 {
+            flag = true
+        }
+        
+        return flag
+    }
+    
+    
+    var duration: String? {
+        guard let runtime = movie.runtime else { return nil }
+        let minutes = runtime % 60
+        let hours = runtime / 60
+        if hours == 0 && minutes == 0 {
+            return ""
+        }
+        return hours == 0 ? "\(minutes)min" :  "\(hours)h \(minutes)min"
+    }
     // Figure out the size of the cell bases on the text
     func size(forWidth width: CGFloat) -> CGSize {
         let measurementLabel = UILabel()
@@ -48,3 +68,4 @@ struct MovieViewModel {
         return measurementLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
 }
+

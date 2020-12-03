@@ -35,5 +35,4 @@ struct MovieResult: Codable {
     let overview: String
     let release_date: String
     
-    
 }

@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         window?.rootViewController = MainTabVC()
-        UITabBarItem.appearance().setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 12)], for: .normal)
+//        UITabBarItem.appearance().setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 12)], for: .normal)
         window?.makeKeyAndVisible()
     }
 

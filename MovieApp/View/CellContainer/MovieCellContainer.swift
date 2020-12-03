@@ -16,15 +16,13 @@ class MovieCellContainer: BaseCell {
     // MARK: Properties
     weak var delegate: MovieCellDelegate?
     var whichRow: Int?
-    var playingNowMovies = [MovieResult]() 
-    var topRatedMovies = [MovieResult]()
-    var upcomingMovies = [MovieResult]()
-    var popularMovies = [MovieResult]()
-    private let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .large)
-        ai.color = .systemRed
-        return ai
-    }()
+
+    var moviesSet = [MovieResult]() {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
+
     
     private let holderView = UIView()
     
@@ -51,76 +49,20 @@ class MovieCellContainer: BaseCell {
         return cv
     }()
     
-    // MARK: API
-    fileprivate func fetch() {
-        
-        let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
-        MovieService.shared.fetchMovies(with: .nowPlaying) { (res) in
-            switch res {
-            case .success(let movieRest):
-                self.playingNowMovies = movieRest.results
-            case .failure(let e ):
-                print(e.localizedDescription)
-            }
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        MovieService.shared.fetchMovies(with: .topRated) { (res) in
-            switch res {
-            case .success(let movieRest):
-                self.topRatedMovies = movieRest.results
-            case .failure(let e ):
-                print(e.localizedDescription)
-            }
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        MovieService.shared.fetchMovies(with: .upcoming) { (res) in
-            switch res {
-            case .success(let movieRest):
-                self.upcomingMovies = movieRest.results
-            case .failure(let e ):
-                print(e.localizedDescription)
-            }
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        MovieService.shared.fetchMovies(with: .popular) { (res) in
-            switch res {
-            case .success(let movieRest):
-                self.popularMovies = movieRest.results
-            case .failure(let e ):
-                print(e.localizedDescription)
-            }
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.notify(queue: .main) { [weak self] in // To notify ourselves when multiple different tasks are finished
-            guard let self = self else { return }
-            print("reload")
-            self.activityIndicator.stopAnimating()
-            self.activityIndicator.hidesWhenStopped = true
-            self.collectionView.reloadData()
-            
-        }
-    }
+
     
     // MARK: Helpers
     override func setupSubviews() {
-        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
-//        window.addSubview(activityIndicator)
-        window.addSubview(holderView)
-        holderView.setDimension(width: 50, height: 50)
-        holderView.backgroundColor = .systemRed
-        holderView.center = window.center
-        holderView.addSubview(activityIndicator)
-        activityIndicator.center = holderView.center
-        activityIndicator.startAnimating()
-        fetch()
+//        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+////        window.addSubview(activityIndicator)
+//        window.addSubview(holderView)
+//        holderView.setDimension(width: 50, height: 50)
+//        holderView.backgroundColor = .systemRed
+//        holderView.center = window.center
+//        holderView.addSubview(activityIndicator)
+//        activityIndicator.center = holderView.center
+//        activityIndicator.startAnimating()
+//        fetch()
         addSubviews(withViews: collectionView, sectionTitle)
         setupCollectionView()
         sectionTitle.anchor(fromTop: topAnchor, fromLeading: leadingAnchor, fromBottom: nil, fromTrailing: trailingAnchor,
@@ -149,25 +91,25 @@ extension MovieCellContainer: CollectionViewMethods {
         switch whichRow {
         case 0:
             let string = headerTitle?.headerTitle
-            let popularMovie = popularMovies[indexPath.row]
+            let popularMovie = moviesSet[indexPath.row]
             delegate?.movieCellDidTap(popularMovie, string)
         case 1:
             let string = headerTitle?.headerTitle
 
-            let nowPlayingMovie = playingNowMovies[indexPath.row]
+            let nowPlayingMovie = moviesSet[indexPath.row]
             delegate?.movieCellDidTap(nowPlayingMovie, string)
         case 2:
             let string = headerTitle?.headerTitle
 
-            let topRated = topRatedMovies[indexPath.row]
+            let topRated = moviesSet[indexPath.row]
             delegate?.movieCellDidTap(topRated, string)
         case 3:
             let string = headerTitle?.headerTitle
 
-            let upComing = upcomingMovies[indexPath.row]
+            let upComing = moviesSet[indexPath.row]
             delegate?.movieCellDidTap(upComing, string)
         default:
-            print("Error")
+            return
         }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -175,16 +117,15 @@ extension MovieCellContainer: CollectionViewMethods {
         
         switch whichCell {
         case 0:
-            return popularMovies.count
+            return moviesSet.count
         case 1:
-            return playingNowMovies.count
+            return moviesSet.count
         case 2:
-            return topRatedMovies.count
+            return moviesSet.count
         case 3:
-            return upcomingMovies.count
+            return moviesSet.count
             
         default:
-            print("Reaylly")
             return 0
         }
     }
@@ -193,23 +134,23 @@ extension MovieCellContainer: CollectionViewMethods {
         switch whichRow {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllMovieCell.movieCellId, for: indexPath) as! AllMovieCell
-            cell.MovieSetCell = popularMovies[indexPath.row]
+            cell.MovieSetCell = moviesSet[indexPath.row]
             return cell
         case 1:
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllMovieCell.movieCellId, for: indexPath) as! AllMovieCell
-            cell.MovieSetCell = playingNowMovies[indexPath.row]
+            cell.MovieSetCell = moviesSet[indexPath.row]
             return cell
         case 2:
             
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllMovieCell.movieCellId, for: indexPath) as! AllMovieCell
-            cell.MovieSetCell = topRatedMovies[indexPath.row]
+            cell.MovieSetCell = moviesSet[indexPath.row]
             return cell
         case 3:
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllMovieCell.movieCellId, for: indexPath) as! AllMovieCell
-            cell.MovieSetCell = upcomingMovies[indexPath.row]
+            cell.MovieSetCell = moviesSet[indexPath.row]
             return cell
             
         default :
