@@ -1,7 +1,7 @@
 import UIKit
 
-
-class MovieService {
+// Consumer class
+class MovieService: ServiceI{
     static let shared = MovieService()
     
     private let baseURL = "https://api.themoviedb.org/3/"
@@ -23,6 +23,8 @@ class MovieService {
         let session = URLSession(configuration: configuration)
         
         let task = session.dataTask(with: url) { (data, res , e) in
+            
+            // Call back for fetching data// Fetching is done we call the completion
             if let e = e {
                 
                 return completion(.failure(e))
@@ -76,7 +78,7 @@ class MovieService {
     }
     
     
-    func fetchMovie(withId movieId: Int, appendTo: [ExtraResponse],  completion: @escaping (Result<MovieDetail, Error>) -> () ) {
+    func fetchMovie(withId movieId: Int, appendTo: [ExtraResponse],  completion: @escaping (Result<Any, Error>) -> () ) {
         
         let stringArray = appendTo.map { $0.rawValue }
         let newString = stringArray.joined(separator: ",")
@@ -113,7 +115,61 @@ class MovieService {
             }
             
         }
-        
         task.resume()
     }
 }
+
+
+// let's create a dependency inversion principle
+
+protocol ServiceI{
+    // Abstraction shouldn't depend on details
+//    associatedtype E
+    func fetchMovie(withId movieId: Int, appendTo: [ExtraResponse], completion: @escaping (Result<Any, Error>) -> ())
+}
+
+//class DetailConcreteObj: ServiceI {
+//    // this is a low-level that depends on the abstraction
+//    private let baseURL = "https://api.themoviedb.org/3/"
+//    private let apiKey = "088955d1b779a7505b0c05185c5a2c84"
+//    func fetch(completion: @escaping (Result<Any, Error>) -> ()) {
+//        let formattedURL = "\(baseURL)movie/\("popular")?api_key=\(apiKey)"
+//
+//        guard let url = URL(string: formattedURL) else {
+//            print("FAKE URL")
+//            return
+//
+//        }
+//        URLSession.shared.dataTask(with: url) { (data , res , e ) in
+//
+//            if let e = e {
+//                completion(.failure(e))
+//                return
+//            }
+//
+//
+//            guard let data = data else {return}
+//            do {
+//                let decodedData = try JSONDecoder().decode(MovieManager.self , from: data)
+//                completion(.success(decodedData ))
+//            } catch let jsonError {
+//                completion(.failure(jsonError))
+//            }
+//        }.resume()
+//    }
+//}
+//
+//// High level moduls
+//class ConsumerController {
+//
+//    var service: ServiceI
+//    init (service: ServiceI)
+//    {
+//        self.service = service
+//        service.fetch { (<#Result<Any, Error>#>) in
+//            <#code#>
+//        }
+//    }
+//
+//}
+

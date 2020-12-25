@@ -52,7 +52,7 @@ class CircularProgressBar: UIView {
 //        
         trackLayer.path = circulePath.cgPath
         trackLayer.fillColor = UIColor.clear.cgColor
-        trackLayer.lineWidth = 4
+        trackLayer.lineWidth = 3
         trackLayer.strokeEnd = 1
         trackLayer.lineCap = CAShapeLayerLineCap.round
         layer.addSublayer(trackLayer)

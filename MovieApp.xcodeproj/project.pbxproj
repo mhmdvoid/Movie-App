@@ -33,7 +33,14 @@
 		9141750E255F32620018811C /* MovieCellContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9141750D255F32620018811C /* MovieCellContainer.swift */; };
 		91417510255F42860018811C /* BaseReusableViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9141750F255F42860018811C /* BaseReusableViews.swift */; };
 		91417514255F436A0018811C /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91417513255F436A0018811C /* UIViewExtension.swift */; };
+		9156360D258BD28800FF78EA /* AnimatorList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9156360C258BD28800FF78EA /* AnimatorList.swift */; };
+		9156360F258C123900FF78EA /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9156360E258C123900FF78EA /* UIViewControllerExtension.swift */; };
+		91563613258C238000FF78EA /* MovieFooterSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91563612258C238000FF78EA /* MovieFooterSection.swift */; };
+		91563619258D1A4D00FF78EA /* ShimmerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91563618258D1A4D00FF78EA /* ShimmerCell.swift */; };
+		9156361B258D1AD900FF78EA /* ShimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9156361A258D1AD900FF78EA /* ShimmerView.swift */; };
+		9156361D258D1CA900FF78EA /* ListInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9156361C258D1CA900FF78EA /* ListInterface.swift */; };
 		9191A2002562CC4600D64115 /* MovieDetailObjectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9191A1FF2562CC4600D64115 /* MovieDetailObjectManager.swift */; };
+		91E52A5325967CFA002137FA /* MovieDetailShimmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E52A5225967CFA002137FA /* MovieDetailShimmer.swift */; };
 		D3592C483878E41F0BD517DB /* Pods_MovieApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD013DC1FB2ADCE85E70821 /* Pods_MovieApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,7 +76,14 @@
 		9141750D255F32620018811C /* MovieCellContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellContainer.swift; sourceTree = "<group>"; };
 		9141750F255F42860018811C /* BaseReusableViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReusableViews.swift; sourceTree = "<group>"; };
 		91417513255F436A0018811C /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		9156360C258BD28800FF78EA /* AnimatorList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatorList.swift; sourceTree = "<group>"; };
+		9156360E258C123900FF78EA /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
+		91563612258C238000FF78EA /* MovieFooterSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieFooterSection.swift; sourceTree = "<group>"; };
+		91563618258D1A4D00FF78EA /* ShimmerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerCell.swift; sourceTree = "<group>"; };
+		9156361A258D1AD900FF78EA /* ShimmerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerView.swift; sourceTree = "<group>"; };
+		9156361C258D1CA900FF78EA /* ListInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListInterface.swift; sourceTree = "<group>"; };
 		9191A1FF2562CC4600D64115 /* MovieDetailObjectManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailObjectManager.swift; sourceTree = "<group>"; };
+		91E52A5225967CFA002137FA /* MovieDetailShimmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailShimmer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,7 +155,6 @@
 			children = (
 				914174F4255F24510018811C /* View */,
 				914174F3255F244F0018811C /* ViewModel */,
-				914174F2255F244B0018811C /* Model */,
 				914174F1255F24490018811C /* API */,
 				914174F0255F24440018811C /* Cotrollers */,
 				914174EF255F24410018811C /* Utilities */,
@@ -166,6 +179,7 @@
 		914174F0255F24440018811C /* Cotrollers */ = {
 			isa = PBXGroup;
 			children = (
+				9156360B258BD27300FF78EA /* AnimatedScreens */,
 				911A1D8D2576E8D10098AC76 /* Screens */,
 				9126B9FC256068F4009DE83D /* MainTabVC.swift */,
 			);
@@ -194,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				9112348225681C2600192FAC /* MovieHeaderViewModel.swift */,
+				914174F2255F244B0018811C /* Model */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -214,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				91417513255F436A0018811C /* UIViewExtension.swift */,
+				9156360E258C123900FF78EA /* UIViewControllerExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -223,6 +239,7 @@
 			children = (
 				91417501255F25B00018811C /* Constant.swift */,
 				91417503255F26BC0018811C /* Endpoints.swift */,
+				91563612258C238000FF78EA /* MovieFooterSection.swift */,
 			);
 			path = "Constants+Enums";
 			sourceTree = "<group>";
@@ -230,6 +247,7 @@
 		914174F7255F24880018811C /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				9156361C258D1CA900FF78EA /* ListInterface.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -248,6 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				911234842568388100192FAC /* CircularProgressBar.swift */,
+				9156361A258D1AD900FF78EA /* ShimmerView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -255,6 +274,7 @@
 		914174FB255F250D0018811C /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				91563617258D1A1600FF78EA /* AnimatedCell */,
 				9126B9FE2560817D009DE83D /* AllMovieCell.swift */,
 				911234AC256B13CF00192FAC /* MovieDetailCell.swift */,
 				911A1D5F256F438A0098AC76 /* CastCell.swift */,
@@ -296,6 +316,23 @@
 				911A1D90257977700098AC76 /* TableCell.swift */,
 			);
 			path = HelperViews;
+			sourceTree = "<group>";
+		};
+		9156360B258BD27300FF78EA /* AnimatedScreens */ = {
+			isa = PBXGroup;
+			children = (
+				9156360C258BD28800FF78EA /* AnimatorList.swift */,
+			);
+			path = AnimatedScreens;
+			sourceTree = "<group>";
+		};
+		91563617258D1A1600FF78EA /* AnimatedCell */ = {
+			isa = PBXGroup;
+			children = (
+				91563618258D1A4D00FF78EA /* ShimmerCell.swift */,
+				91E52A5225967CFA002137FA /* MovieDetailShimmer.swift */,
+			);
+			path = AnimatedCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -412,6 +449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91563619258D1A4D00FF78EA /* ShimmerCell.swift in Sources */,
 				9126B9FF2560817D009DE83D /* AllMovieCell.swift in Sources */,
 				91417510255F42860018811C /* BaseReusableViews.swift in Sources */,
 				91417500255F25450018811C /* HomeList.swift in Sources */,
@@ -423,6 +461,8 @@
 				9126B9FD256068F4009DE83D /* MainTabVC.swift in Sources */,
 				914174DE255F23F60018811C /* SceneDelegate.swift in Sources */,
 				911A1D6825730BD90098AC76 /* MovieTitleCell.swift in Sources */,
+				9156361B258D1AD900FF78EA /* ShimmerView.swift in Sources */,
+				9156360F258C123900FF78EA /* UIViewControllerExtension.swift in Sources */,
 				91417514255F436A0018811C /* UIViewExtension.swift in Sources */,
 				91417502255F25B00018811C /* Constant.swift in Sources */,
 				9141750C255F32120018811C /* BaseCell.swift in Sources */,
@@ -430,13 +470,17 @@
 				911A1D91257977700098AC76 /* TableCell.swift in Sources */,
 				911A1D60256F438A0098AC76 /* CastCell.swift in Sources */,
 				91417506255F27A80018811C /* MoviewContainer.swift in Sources */,
+				91563613258C238000FF78EA /* MovieFooterSection.swift in Sources */,
 				91417504255F26BC0018811C /* Endpoints.swift in Sources */,
 				911A1D5E256F241B0098AC76 /* Cast.swift in Sources */,
 				9191A2002562CC4600D64115 /* MovieDetailObjectManager.swift in Sources */,
+				9156361D258D1CA900FF78EA /* ListInterface.swift in Sources */,
 				911A1D6A257312180098AC76 /* Utility.swift in Sources */,
+				91E52A5325967CFA002137FA /* MovieDetailShimmer.swift in Sources */,
 				91417508255F297D0018811C /* MovieService.swift in Sources */,
 				9112347F256768DF00192FAC /* MovieVC.swift in Sources */,
 				9112348125681BB000192FAC /* MovieHeader.swift in Sources */,
+				9156360D258BD28800FF78EA /* AnimatorList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

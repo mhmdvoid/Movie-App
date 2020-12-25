@@ -9,7 +9,7 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-class HomeList: UICollectionViewController {
+class HomeList: UIAnimatorController {
     
     lazy var refereshControl: UIRefreshControl = {
         let r = UIRefreshControl()
@@ -26,29 +26,16 @@ class HomeList: UICollectionViewController {
     var topRatedMovies = [MovieResult]()
     var upcomingMovies = [MovieResult]()
     var popularMovies = [MovieResult]()
-    private let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .large)
-        ai.color = .systemRed
-        return ai
-    }()
     
     // MARK: Constructor
-    init() {
-        let layout = FlowLayout()
-        super.init(collectionViewLayout: layout)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+  
     
     
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(activityIndicator)
-        activityIndicator.center(inView: view)
-        activityIndicator.startAnimating()
+        
+        startAnimating(customCell: ShimmerCell.self)
         setupCollectionView()
         fetch()
     }
@@ -56,7 +43,7 @@ class HomeList: UICollectionViewController {
         super.viewWillAppear(animated )
         setNavBar()
     }
-
+    
     // MARK: API
     fileprivate func fetch() {
         let dispatchGroup = DispatchGroup()
@@ -82,20 +69,27 @@ class HomeList: UICollectionViewController {
                         
                         this.upcomingMovies = movieRest.results
                     }
+                    dispatchGroup.leave()
+
                 case .failure(let e):
                     print(e.localizedDescription)
                 }
-                dispatchGroup.leave()
+                
             }
         }
         dispatchGroup.notify(queue: .main) { [weak self] in // To notify ourselves when multiple different tasks are finished
             guard let self = self else { return }
-            self.activityIndicator.stopAnimating()
-            self.activityIndicator.hidesWhenStopped = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                print("I took time & went down to other threads")
+                self.isAnimatedLoading = false
+                self.navigationItem.title = "Movie"
+            }
+            print("i have asynced the code takes time and am executing this code here till the result got back from the code takes time")
             self.collectionView.reloadData()
             
         }
     }
+    
     
     @objc func refresh(_ refreshControl: UIRefreshControl) {
         
@@ -115,6 +109,7 @@ class HomeList: UICollectionViewController {
     
     fileprivate func setNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
+        
     }
     
     
@@ -173,11 +168,7 @@ extension HomeList: UICollectionViewDelegateFlowLayout, MovieCellDelegate {
     }
     func movieCellDidTap(_ withMovie: MovieResult, _ backBtnTitle: String?) {
         guard let backButtonString = backBtnTitle else { return }
-        let movieVC = MovieVC(theMovieId: withMovie.id, backButtonTitle: backButtonString)
+        let movieVC = MovieVC(service: MovieService(), movieId: withMovie.id, backButtonTitle: backButtonString)
         navigationController?.pushViewController(movieVC, animated: true)
     }
-    
-    
-    
-    
 }

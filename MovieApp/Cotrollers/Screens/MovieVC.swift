@@ -6,46 +6,59 @@ enum ExtraResponse: String{
     case similar = "similar"
 }
 
-enum FooterTitleSection: Int {
-    case cast = 3
-    case similar = 4
-    
-    var description: String {
-        switch self  {
-        case .cast:
-            return "Cast"
-        case .similar:
-            return "Similar"
-        }
-    }
-}
 class MovieVC: UITableViewController {
+    private let c = AnimatorList()
+    func startAnimating() {
+        addChild(c)
+        view.addSubview(c.view)
+        c.didMove(toParent: self)
+        c.height = c.view.frame.height
+        fillToEdege(yourView: c.view)
+        c.prepareCustomCell(MovieDetailShimmer.self, reuseIdentifier: "reuseIden")
+        
+    }
+    fileprivate func fillToEdege(yourView: UIView) {
+        
+        [
+            yourView.topAnchor.constraint(equalTo: view.topAnchor),
+            yourView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            yourView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            yourView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            ].forEach { $0.isActive = true }
+    }
     
     deinit {
         print("MovidVC deallocate")
     }
-    let theMovieId: Int
+    let movieId: Int
     let backButtonString: String
+    var service : ServiceI
+    
     var theMovie: MovieDetail? {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicator.hidesWhenStopped = true
+                self.hideAnimation()
                 self.tableView.reloadData()
             }
         }
     }
+    private final func hideAnimation() {
+          c.willMove(toParent: nil)
+          c.view.removeFromSuperview()
+          c.removeFromParent()
+      }
+//    private let activityIndicator: UIActivityIndicatorView = {
+//        let ai = UIActivityIndicatorView(style: .large)
+//        ai.color = .systemRed
+//        return ai
+//    }()
     
-    private let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .large)
-        ai.color = .systemRed
-        return ai
-    }()
-    
-    init(theMovieId: Int, backButtonTitle: String) {
-        self.theMovieId = theMovieId
+    init(service: ServiceI, movieId: Int, backButtonTitle: String) {
+        self.movieId = movieId
         self.backButtonString = backButtonTitle
+        self.service = service
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -57,11 +70,11 @@ class MovieVC: UITableViewController {
     
     
     override func viewDidLoad() {
-        
+        startAnimating()
         super.viewDidLoad()
-        view.addSubview(activityIndicator)
-        activityIndicator.center(inView: view)
-        activityIndicator.startAnimating()
+//        view.addSubview(activityIndicator)
+//        activityIndicator.center(inView: view)
+//        activityIndicator.startAnimating()
         navigationItem.title = "Details"
         setupTableView()
         changeBackButtonTitle(withTitle: backButtonString)
@@ -70,14 +83,14 @@ class MovieVC: UITableViewController {
     
     // MARK: API
     fileprivate func fetchMovie() {
-        MovieService.shared.fetchMovie(withId: theMovieId, appendTo: [.credits, .similar]) { [weak self] result in   // Tight coupling use DIP that implements the dependency injection design pattern
-            switch result {
+        
+        service.fetchMovie(withId: movieId, appendTo: [.credits, .similar]) { [weak self] res in
+            switch res {
             case .success(let theMovie):
-                self?.theMovie = theMovie
+                self?.theMovie = theMovie as? MovieDetail
             case .failure(let e):
                 print(e.localizedDescription)
             }
-            
         }
         
     }
@@ -93,10 +106,12 @@ class MovieVC: UITableViewController {
     }
     
     fileprivate func setupTableView() {
-        tableView.register(multiple: MovieDetailCell.self, MovieHeader.self, MovieFooterContainer.self, MovieTitleCell.self)
+        tableView.register(multiple: MovieDetailCell.self, MovieHeader.self, MovieFooterContainer.self, MovieTitleCell.self, MovieTitleCell.self)
+        
         tableView.contentInset = .init(top: 7, left: 0, bottom: 0, right: 0)
         tableView.separatorStyle = .none
     }
+    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
@@ -104,6 +119,7 @@ class MovieVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0:
+            
             
             let cell = tableView.dequeueReusableCell(withIdentifier: MovieTitleCell.id) as! MovieTitleCell
             cell.theMovie = theMovie

@@ -12,13 +12,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        constructRootContoller(with: windowScene)
+    }
+    
+    func constructRootContoller(with windowScene: UIWindowScene) {
         window = UIWindow(windowScene: windowScene)
-        
         window?.rootViewController = MainTabVC()
-//        UITabBarItem.appearance().setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 12)], for: .normal)
         window?.makeKeyAndVisible()
     }
 
