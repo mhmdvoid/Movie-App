@@ -26,6 +26,8 @@
 12. Adopt with Dark-Mode and Light-Mode.
 13. UINavigationController.
 14. UITabBarController.
+15. Create Shimmer Animation
+16. ChildViewController
 ---
 And much more !.
 
